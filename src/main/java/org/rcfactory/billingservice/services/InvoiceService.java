@@ -1,5 +1,6 @@
 package org.rcfactory.billingservice.services;
 
+import static java.time.LocalDate.now;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import org.rcfactory.billingservice.api.CustomerServiceApi;
 import org.rcfactory.billingservice.controllers.dto.InvoiceRequestDTO;
 import org.rcfactory.billingservice.controllers.dto.InvoiceResponseDTO;
+import org.rcfactory.billingservice.domain.Customer;
 import org.rcfactory.billingservice.entities.Invoice;
 import org.rcfactory.billingservice.mappers.InvoiceMapper;
 import org.rcfactory.billingservice.repositories.InvoiceRepository;
@@ -31,8 +33,15 @@ public class InvoiceService {
     }
 
     public InvoiceResponseDTO save(InvoiceRequestDTO invoiceRequestDTO) {
+        Customer customer = customerServiceApi.customer(invoiceRequestDTO.getClientId())
+                .orElse(null);
         return ofNullable(invoiceRequestDTO)
                 .map(invoiceMapper::ivoiceRequestToInvoice)
+                .map(i -> new Invoice(null,
+                        now(),
+                        i.getAmount(),
+                        i.getClientId(),
+                        customer))
                 .map(invoiceRepository::save)
                 .map(invoiceMapper::ivoiceToInvoiceResponseDto)
                 .orElse(null);

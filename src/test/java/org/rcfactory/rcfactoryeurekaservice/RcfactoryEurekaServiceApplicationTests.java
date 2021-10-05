@@ -1,10 +1,10 @@
-package org.rcfactory.billingservice;
+package org.rcfactory.rcfactoryeurekaservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BillingServiceApplicationTests {
+class RcfactoryEurekaServiceApplicationTests {
 
     @Test
     void contextLoads() {
